@@ -12,7 +12,7 @@ X-Python3-Version: current
 Package: agrum
 Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, python-numpy, python3-numpy
+Depends: ${shlibs:Depends}, ${misc:Depends}, python-numpy, python3-numpy, libodbc1
 Description: A GRaphical Universal Modeler
  aGrUM is a C++ library designed for easily building applications using graphical models such as Bayesian networks,
  influence diagrams, decision trees, GAI networks or Markov decision processes.
