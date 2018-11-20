@@ -1,0 +1,59 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4bb966204..f884062ed 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -16,12 +16,18 @@ set(BACKUP_CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+ include("VERSION.txt")
+ set(AGRUM_VERSION "${AGRUM_VERSION_MAJOR}.${AGRUM_VERSION_MINOR}.${AGRUM_VERSION_PATCH}")
+ 
+-cmake_policy(SET CMP0048 NEW) # VERSION arg in 'project'
+-project (agrum VERSION ${AGRUM_VERSION})
++if (CMAKE_VERSION VERSION_GREATER 3)
++  if (POLICY CMP0048)
++    cmake_policy(SET CMP0048 NEW) # VERSION arg in 'project'
++  endif ()
++  project (agrum VERSION ${AGRUM_VERSION})
++else ()
++  project (agrum)
++endif ()
+ 
+ set(CMAKE_INSTALL_PREFIX ${BACKUP_CMAKE_INSTALL_PREFIX})
+ 
+-cmake_minimum_required (VERSION 3.1)
++cmake_minimum_required (VERSION 2.8.12)
+ 
+ # options
+ option(BUILD_SHARED_LIBS "build shared|static libs" ON)
+diff --git a/wrappers/pyAgrum/CMakeLists.txt b/wrappers/pyAgrum/CMakeLists.txt
+index cb127ca03..68069b9c9 100644
+--- a/wrappers/pyAgrum/CMakeLists.txt
++++ b/wrappers/pyAgrum/CMakeLists.txt
+@@ -90,9 +90,9 @@ if (SWIG_FOUND)
+   set(_PYAGRUMLIB "pyAgrum")
+   set(SWIG_MODULE_${_PYAGRUMLIB}_EXTRA_DEPS ${BUILDSWIGFILES})
+   if (CMAKE_VERSION VERSION_LESS 3.8)
+-    swig_add_module (pyAgrum python ${CMAKE_CURRENT_SOURCE_DIR}/pyAgrum.i)
++    swig_add_module (pyAgrum python ${AGRUM_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/pyAgrum.i)
+   else ()
+-    swig_add_library (pyAgrum LANGUAGE python SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/pyAgrum.i)
++    swig_add_library (pyAgrum LANGUAGE python SOURCES ${AGRUM_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/pyAgrum.i)
+   endif ()
+   if (CMAKE_VERSION VERSION_LESS 3.13)
+     set(_PYAGRUMLIB ${SWIG_MODULE_pyAgrum_REAL_NAME})
+@@ -102,7 +102,7 @@ if (SWIG_FOUND)
+ else (SWIG_FOUND)
+   set(_PYAGRUMLIB "_pyAgrum")
+   file(GLOB SWIG_GENERATED_FILES "${GENERATED_PYTHON}/*.cxx")
+-  add_library (${_PYAGRUMLIB} MODULE ${SWIG_GENERATED_FILES})
++  add_library (${_PYAGRUMLIB} MODULE ${AGRUM_SOURCES} ${SWIG_GENERATED_FILES})
+   set_target_properties(${_PYAGRUMLIB} PROPERTIES PREFIX "")
+   set_target_properties(${_PYAGRUMLIB} PROPERTIES LINKER_LANGUAGE CXX)
+   if (WIN32)
+@@ -118,7 +118,6 @@ target_link_libraries_with_dynamic_lookup (${_PYAGRUMLIB} ${PYTHON_LIBRARIES})
+ set_target_properties(${_PYAGRUMLIB} PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
+ 
+ set_target_properties(${_PYAGRUMLIB} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+-target_sources (${_PYAGRUMLIB} PUBLIC ${AGRUM_SOURCES})
+ 
+ # for additionnal rule such test pyAgrum
+ add_custom_command(TARGET ${_PYAGRUMLIB} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_SWIG_OUTDIR}/pyAgrum.py" "${CMAKE_CURRENT_BINARY_DIR}/.")

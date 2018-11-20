@@ -14,6 +14,9 @@ fflags := $(shell dpkg-buildflags --get FFLAGS)
 ldflags := $(shell dpkg-buildflags --get LDFLAGS)
 ldflags += -Wl,--as-needed
 
+# too much ram
+cxxflags := $(subst -O2,-O1,$(cxxflags))
+
 # Explicitly set builddir directory
 builddir := obj-$(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 
@@ -36,7 +39,6 @@ cmake-configure-%:
             -DCMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO:STRING='$(ldflags)' \
             -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
             -DCMAKE_INSTALL_PREFIX:PATH=/usr \
-            -DINSTALL_DESTDIR:PATH=$(CURDIR)/debian/agrum \
             -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python$* \
             -DPYTHON_INCLUDE_DIR:PATH=$$(python$*-config --includes | sed -e 's/ .*//' -e 's/^-I//') \
             -DPYTHON_INCLUDE_DIR2:PATH=$$(python$*-config --includes | sed -e 's/ .*//' -e 's/^-I//') \

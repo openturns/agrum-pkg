@@ -22,10 +22,15 @@ Group:          System Environment/Libraries
 License:        GPLv3+
 URL:            http://agrum.gitlab.io/
 Source0:        https://gitlab.com/agrumery/aGrUM/-/archive/%{version}/aGrUM-%{version}.tar.bz2
+Patch0:         cmake28.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gcc-c++, cmake
 BuildRequires:  python-devel
+%if 0%{?centos_version}
+BuildRequires:  numpy
+%else
 BuildRequires:  python-numpy
+%endif
 Requires:       libagrum0
 
 %description
@@ -58,12 +63,17 @@ Example files for aGrUM
 %package -n python-%{name}
 Summary:        aGrUM library
 Group:          Productivity/Scientific/Math
+%if 0%{?centos_version}
+Requires:       numpy
+%else
 Requires:       python-numpy
+%endif
 %description -n python-%{name}
 Python textual interface to aGrUM library
 
 %prep
 %setup -q -n aGrUM-%{version}
+%patch0 -p1
 
 %build
 %cmake -DINSTALL_DESTDIR:PATH=%{buildroot} \
