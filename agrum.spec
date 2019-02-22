@@ -1,4 +1,5 @@
 # norootforbuild
+%global __python %{__python2}
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 
 %define __cmake %{_bindir}/cmake
@@ -15,7 +16,7 @@ FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
 -DBUILD_SHARED_LIBS:BOOL=ON
 
 Name:           agrum
-Version:        0.13.3
+Version:        0.14.1
 Release:        0%{?dist}
 Summary:        A GRaphical Universal Modeler
 Group:          System Environment/Libraries
@@ -39,14 +40,14 @@ It is designed for easily building applications using graphical models such as B
 influence diagrams, decision trees, GAI networks or Markov decision processes.
 
 %package -n libagrum0
-Summary:        aGrUM development files
+Summary:        AGrUM library files
 Group:          Development/Libraries/C and C++
 
 %description -n libagrum0
 Dynamic libraries for aGrUM.
 
 %package devel
-Summary:        aGrUM development files
+Summary:        AGrUM development files
 Group:          Development/Libraries/C and C++
 Requires:       libagrum0 = %{version}
 
@@ -54,14 +55,14 @@ Requires:       libagrum0 = %{version}
 Development files for aGrUM library.
 
 %package examples
-Summary:        aGrUM examples
+Summary:        AGrUM examples
 Group:          Productivity/Scientific/Math
 
 %description examples
 Example files for aGrUM
 
 %package -n python-%{name}
-Summary:        aGrUM library
+Summary:        AGrUM Python module
 Group:          Productivity/Scientific/Math
 %if 0%{?centos_version}
 Requires:       numpy
@@ -78,18 +79,17 @@ Python textual interface to aGrUM library
 %build
 %cmake -DINSTALL_DESTDIR:PATH=%{buildroot} \
        -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
-       -DPYTHON_EXECUTABLE=/usr/bin/python \
-       -DFOR_PYTHON3=OFF \
+       -DPYTHON_EXECUTABLE=%{__python} \
        .
 make %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
+rm -r %{buildroot}%{python_sitearch}/pyAgrum/causal
 
 %check
-LD_LIBRARY_PATH=%{buildroot}%{_libdir} PYTHONPATH=%{buildroot}%{_libdir}/python2.7/site-packages python ./wrappers/pyAgrum/testunits/gumTest.py
-rm %{buildroot}%{python_sitearch}/pyAgrum/*.pyc
+LD_LIBRARY_PATH=%{buildroot}%{_libdir} PYTHONPATH=%{buildroot}%{python_sitearch} %{__python} ./wrappers/pyAgrum/testunits/gumTest.py
 
 %clean
 rm -rf %{buildroot}
