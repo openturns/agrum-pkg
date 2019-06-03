@@ -16,11 +16,11 @@ FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
 -DBUILD_SHARED_LIBS:BOOL=ON
 
 Name:           agrum
-Version:        0.14.1
+Version:        0.15.0
 Release:        0%{?dist}
 Summary:        A GRaphical Universal Modeler
 Group:          System Environment/Libraries
-License:        GPLv3+
+License:        LGPLv3+
 URL:            http://agrum.gitlab.io/
 Source0:        https://gitlab.com/agrumery/aGrUM/-/archive/%{version}/aGrUM-%{version}.tar.bz2
 Patch0:         cmake28.patch
@@ -77,8 +77,7 @@ Python textual interface to aGrUM library
 %patch0 -p1
 
 %build
-%cmake -DINSTALL_DESTDIR:PATH=%{buildroot} \
-       -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
+%cmake -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
        -DPYTHON_EXECUTABLE=%{__python} \
        .
 make %{?_smp_mflags}
@@ -86,7 +85,6 @@ make %{?_smp_mflags}
 %install
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
-rm -r %{buildroot}%{python_sitearch}/pyAgrum/causal
 
 %check
 LD_LIBRARY_PATH=%{buildroot}%{_libdir} PYTHONPATH=%{buildroot}%{python_sitearch} %{__python} ./wrappers/pyAgrum/testunits/gumTest.py
