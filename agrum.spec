@@ -16,7 +16,7 @@ FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
 -DBUILD_SHARED_LIBS:BOOL=ON
 
 Name:           agrum
-Version:        0.15.0
+Version:        0.15.1
 Release:        0%{?dist}
 Summary:        A GRaphical Universal Modeler
 Group:          System Environment/Libraries
@@ -31,6 +31,9 @@ BuildRequires:  python-devel
 BuildRequires:  numpy
 %else
 BuildRequires:  python-numpy
+%endif
+%if 0%{?mageia}
+BuildRequires:  libgomp-devel
 %endif
 Requires:       libagrum0
 
