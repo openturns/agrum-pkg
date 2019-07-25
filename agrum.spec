@@ -16,7 +16,7 @@ FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
 -DBUILD_SHARED_LIBS:BOOL=ON
 
 Name:           agrum
-Version:        0.15.1
+Version:        0.15.2
 Release:        0%{?dist}
 Summary:        A GRaphical Universal Modeler
 Group:          System Environment/Libraries
@@ -24,6 +24,7 @@ License:        LGPLv3+
 URL:            http://agrum.gitlab.io/
 Source0:        https://gitlab.com/agrumery/aGrUM/-/archive/%{version}/aGrUM-%{version}.tar.bz2
 Patch0:         cmake28.patch
+Patch1:         nopydotplus.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gcc-c++, cmake
 BuildRequires:  python-devel
@@ -78,6 +79,7 @@ Python textual interface to aGrUM library
 %prep
 %setup -q -n aGrUM-%{version}
 %patch0 -p1
+%patch1 -p1
 
 %build
 %cmake -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
