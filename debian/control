@@ -3,7 +3,7 @@ Section: science
 Priority: extra
 Maintainer: Debian Science Maintainers <debian-science-maintainers@lists.alioth.debian.org>
 Uploaders: Christophe Prud'homme <prudhomm@debian.org>, Denis Barbier <barbier@debian.org>
-Build-Depends: debhelper (>= 8), quilt, cmake, python-dev, python3-dev, python-numpy, python3-numpy
+Build-Depends: debhelper (>= 8), quilt, cmake, python-dev, python3-dev, python-numpy, python3-numpy, python-six, python3-six, python-configparser
 Standards-Version: 3.9.6
 Homepage: http://agrum.gitlab.io/
 X-Python-Version: current
@@ -12,7 +12,7 @@ X-Python3-Version: current
 Package: agrum
 Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, python-numpy, python3-numpy
+Depends: ${shlibs:Depends}, ${misc:Depends}, python-numpy, python3-numpy, python-six, python3-six, python-configparser
 Description: A GRaphical Universal Modeler
  aGrUM is a C++ library designed for easily building applications using graphical models such as Bayesian networks,
  influence diagrams, decision trees, GAI networks or Markov decision processes.
