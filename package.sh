@@ -7,7 +7,7 @@ set -e
 path=.
 pkgname=agrum
 obs=~/projects/science:openturns/$pkgname
-pkgver=0.16.3
+pkgver=0.17.2
 debver=$pkgver
 rel=0.1
 
@@ -83,12 +83,10 @@ debuild -us -uc -S || echo "failed"
 # rpm files
 echo "-- Copying files to $obs"
 cp -v ~/projects/openturns/agrum-pkg/$pkgname.spec /tmp/aGrUM-$pkgver.tar.bz2 $obs
-cp -v ~/projects/openturns/agrum-pkg/cmake28.patch $obs
-cp -v ~/projects/openturns/agrum-pkg/disable-import-test.patch $obs
 cp -v /tmp/"$pkgname"_$debver.orig.tar.bz2 /tmp/"$pkgname"_$debver-$rel.dsc /tmp/"$pkgname"_$debver-$rel.debian.tar.xz $obs
 
 
 # build binary packages
-#DEB_BUILD_OPTIONS="parallel=16" debuild -us -uc
+DEB_BUILD_OPTIONS="parallel=20" debuild -us -uc
 
 

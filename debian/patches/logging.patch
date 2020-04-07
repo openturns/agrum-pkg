@@ -1,0 +1,22 @@
+diff --git a/wrappers/pyAgrum/testunits/gumTest.py b/wrappers/pyAgrum/testunits/gumTest.py
+index f70b89a34..303e57d64 100644
+--- a/wrappers/pyAgrum/testunits/gumTest.py
++++ b/wrappers/pyAgrum/testunits/gumTest.py
+@@ -10,7 +10,7 @@ import logging
+ 
+ cwd=os.getcwd()
+ FORMAT = '%(asctime)s | %(levelname)s | %(filename)s:%(lineno)d | %(funcName)s | %(message)s'
+-logging.basicConfig(filename='../../pyAgrumTests.log',
++logging.basicConfig(filename='/tmp/pyAgrumTests.log',
+                     filemode='w', format=FORMAT, level=logging.DEBUG)
+     
+ os.chdir(os.path.dirname(__file__ if __file__[0] == '/' else "./" + __file__))
+@@ -78,7 +78,7 @@ os.chdir(cwd)
+ print("-" * 70)
+ print(" log file ")
+ print("-" * 70)
+-with open("../../pyAgrumTests.log", "r") as logfile:
++with open("/tmp/pyAgrumTests.log", "r") as logfile:
+   for f in logfile.readlines():
+     if "[pyAgrum]" in f:
+       print(f,end='')

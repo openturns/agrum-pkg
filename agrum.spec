@@ -1,6 +1,10 @@
 # norootforbuild
-%global __python %{__python2}
+%{?__python3: %global __python %{__python3}}
+%if 0%{?suse_version}
+%global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")
+%else
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
+%endif
 
 %define __cmake %{_bindir}/cmake
 %define _cmake_lib_suffix64 -DLIB_SUFFIX=64
@@ -16,25 +20,18 @@ FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
 -DBUILD_SHARED_LIBS:BOOL=ON
 
 Name:           agrum
-Version:        0.16.3
+Version:        0.17.2
 Release:        0%{?dist}
 Summary:        A GRaphical Universal Modeler
 Group:          System Environment/Libraries
 License:        LGPLv3+
 URL:            http://agrum.gitlab.io/
 Source0:        https://gitlab.com/agrumery/aGrUM/-/archive/%{version}/aGrUM-%{version}.tar.bz2
-Patch0:         cmake28.patch
-Patch1:         disable-import-test.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gcc-c++, cmake
-BuildRequires:  python-devel
-%if 0%{?centos_version}
-BuildRequires:  numpy
-%else
-BuildRequires:  python-numpy
-%endif
-BuildRequires:  python-six
-BuildRequires:  python-configparser
+BuildRequires:  python3-devel
+BuildRequires:  python3-numpy
+BuildRequires:  python3-six
 %if 0%{?mageia}
 BuildRequires:  libgomp-devel
 %endif
@@ -67,27 +64,21 @@ Group:          Productivity/Scientific/Math
 %description examples
 Example files for aGrUM
 
-%package -n python-%{name}
+%package -n python3-%{name}
 Summary:        AGrUM Python module
 Group:          Productivity/Scientific/Math
-%if 0%{?centos_version}
-Requires:       numpy
-%else
-Requires:       python-numpy
-%endif
-Requires:       python-six
-Requires:       python-configparser
-%description -n python-%{name}
+Requires:       python3-numpy
+Requires:       python3-six
+%description -n python3-%{name}
 Python textual interface to aGrUM library
 
 %prep
 %setup -q -n aGrUM-%{version}
-%patch0 -p1
-%patch1 -p1
 
 %build
 %cmake -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
        -DPYTHON_EXECUTABLE=%{__python} \
+       -DBUILD_PYTHON=ON \
        .
 make %{?_smp_mflags}
 
@@ -116,7 +107,7 @@ rm -rf %{buildroot}
 %{_libdir}/cmake/
 %{_libdir}/pkgconfig/
 
-%files -n python-%{name}
+%files -n python3-%{name}
 %defattr(-,root,root,-)
 %{python_sitearch}/pyAgrum*
 

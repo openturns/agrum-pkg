@@ -1,2 +1,1 @@
-cmake28.patch
-disable-import-test.patch
+logging.patch
