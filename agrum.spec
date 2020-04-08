@@ -69,6 +69,12 @@ Summary:        AGrUM Python module
 Group:          Productivity/Scientific/Math
 Requires:       python3-numpy
 Requires:       python3-six
+%if 0%{?mageia} || 0%{?fedora_version}
+Provides:       python(abi) = 3
+%endif%
+%if 0%{?mageia}
+Provides:       python3.7dist(configparser)
+%endif
 %description -n python3-%{name}
 Python textual interface to aGrUM library
 
