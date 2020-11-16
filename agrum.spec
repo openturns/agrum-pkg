@@ -72,6 +72,9 @@ Requires:       python3-six
 %if 0%{?mageia} || 0%{?fedora_version}
 Provides:       python(abi) = 3
 %endif
+%if 0%{?fedora_version}
+Provides:       python3.9dist(configparser)
+%endif
 %if 0%{?mageia}
 Provides:       python3.7dist(configparser)
 %endif
