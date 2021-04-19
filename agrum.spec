@@ -20,7 +20,7 @@ FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
 -DBUILD_SHARED_LIBS:BOOL=ON
 
 Name:           agrum
-Version:        0.18.1
+Version:        0.20.1
 Release:        0%{?dist}
 Summary:        A GRaphical Universal Modeler
 Group:          System Environment/Libraries
@@ -76,7 +76,7 @@ Provides:       python(abi) = 3
 Provides:       python3.9dist(configparser)
 %endif
 %if 0%{?mageia}
-Provides:       python3.7dist(configparser)
+Provides:       python3.8dist(configparser)
 %endif
 %description -n python3-%{name}
 Python textual interface to aGrUM library
