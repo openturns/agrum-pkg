@@ -1,4 +1,3 @@
-# norootforbuild
 %{?__python3: %global __python %{__python3}}
 %if 0%{?suse_version}
 %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")
@@ -6,32 +5,19 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
 
-%define __cmake %{_bindir}/cmake
-%define _cmake_lib_suffix64 -DLIB_SUFFIX=64
-%define cmake \
-CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; \
-CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; \
-FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
-%__cmake \\\
--DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} \\\
-%if "%{?_lib}" == "lib64" \
-%{?_cmake_lib_suffix64} \\\
-%endif \
--DBUILD_SHARED_LIBS:BOOL=ON
-
 Name:           agrum
-Version:        0.22.2
+Version:        0.22.9
 Release:        0%{?dist}
 Summary:        A GRaphical Universal Modeler
 Group:          System Environment/Libraries
 License:        LGPLv3+
 URL:            http://agrum.gitlab.io/
 Source0:        https://gitlab.com/agrumery/aGrUM/-/archive/%{version}/aGrUM-%{version}.tar.bz2
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gcc-c++, cmake
 BuildRequires:  python3-devel
 BuildRequires:  python3-numpy
 BuildRequires:  python3-six
+BuildRequires:  python3-pydot
 %if 0%{?mageia}
 BuildRequires:  libgomp-devel
 %endif
@@ -69,11 +55,15 @@ Summary:        AGrUM Python module
 Group:          Productivity/Scientific/Math
 Requires:       python3-numpy
 Requires:       python3-six
+Requires:       python3-pydot
 %if 0%{?mageia} || 0%{?fedora_version}
 Provides:       python(abi) = 3
 %endif
-%if 0%{?fedora_version}
+%if 0%{?fedora_version} == 34
 Provides:       python3.9dist(configparser)
+%endif
+%if 0%{?fedora_version} == 35
+Provides:       python3.10dist(configparser)
 %endif
 %if 0%{?mageia}
 Provides:       python3.8dist(configparser)
@@ -87,19 +77,14 @@ Python textual interface to aGrUM library
 %build
 %cmake -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
        -DPYTHON_EXECUTABLE=%{__python} \
-       -DBUILD_PYTHON=ON \
-       .
-make %{?_smp_mflags}
+       -DBUILD_PYTHON=ON
+%cmake_build
 
 %install
-rm -rf %{buildroot}
-make install DESTDIR=%{buildroot}
+%cmake_install
 
 %check
 LD_LIBRARY_PATH=%{buildroot}%{_libdir} PYTHONPATH=%{buildroot}%{python_sitearch} %{__python} ./wrappers/pyAgrum/testunits/gumTest.py
-
-%clean
-rm -rf %{buildroot}
 
 %post -n libagrum0 -p /sbin/ldconfig 
 %postun -n libagrum0 -p /sbin/ldconfig 

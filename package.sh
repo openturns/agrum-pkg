@@ -7,7 +7,7 @@ set -e
 path=.
 pkgname=agrum
 obs=~/projects/science:openturns/$pkgname
-pkgver=0.22.2
+pkgver=0.22.9
 debver=$pkgver
 rel=0.1
 
