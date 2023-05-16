@@ -1,6 +1,6 @@
-agrum (1.0.0-0.1) unstable; urgency=low
+agrum (1.8.0-0.1) unstable; urgency=low
 
   * Non-maintainer upload.
   * Initial release.
 
- -- Julien Schueller <schueller@phimeca.com>  Mon, 05 Nov 2018 08:06:41 +0100
+ -- Julien Schueller <schueller@phimeca.com>  Mon, 15 May 2023 08:06:41 +0100

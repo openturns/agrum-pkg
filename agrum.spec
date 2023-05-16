@@ -6,7 +6,7 @@
 %endif
 
 Name:           agrum
-Version:        1.0.0
+Version:        1.8.0
 Release:        0%{?dist}
 Summary:        A GRaphical Universal Modeler
 Group:          System Environment/Libraries
@@ -18,9 +18,7 @@ BuildRequires:  python3-devel
 BuildRequires:  python3-numpy
 BuildRequires:  python3-six
 BuildRequires:  python3-pydot
-%if 0%{?mageia}
-BuildRequires:  libgomp-devel
-%endif
+BuildRequires:  python3-matplotlib
 Requires:       libagrum0
 
 %description
@@ -56,18 +54,7 @@ Group:          Productivity/Scientific/Math
 Requires:       python3-numpy
 Requires:       python3-six
 Requires:       python3-pydot
-%if 0%{?mageia} || 0%{?fedora_version}
-Provides:       python(abi) = 3
-%endif
-%if 0%{?fedora_version} == 34
-Provides:       python3.9dist(configparser)
-%endif
-%if 0%{?fedora_version} == 35
-Provides:       python3.10dist(configparser)
-%endif
-%if 0%{?mageia}
-Provides:       python3.8dist(configparser)
-%endif
+Requires:       python3-matplotlib
 %description -n python3-%{name}
 Python textual interface to aGrUM library
 
@@ -75,9 +62,7 @@ Python textual interface to aGrUM library
 %setup -q -n aGrUM-%{version}
 
 %build
-%cmake -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
-       -DPYTHON_EXECUTABLE=%{__python} \
-       -DBUILD_PYTHON=ON
+%cmake -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON -DBUILD_PYTHON=ON
 %cmake_build
 
 %install
