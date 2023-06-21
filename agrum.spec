@@ -6,7 +6,7 @@
 %endif
 
 Name:           agrum
-Version:        1.8.0
+Version:        1.8.3
 Release:        0%{?dist}
 Summary:        A GRaphical Universal Modeler
 Group:          System Environment/Libraries
