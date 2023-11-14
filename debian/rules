@@ -26,6 +26,8 @@ override_dh_auto_build:
 
 override_dh_auto_install:
 	dh_auto_install -Bbuilddir
+	sed -i "s|sys.log|logging.warning|g" $(CURDIR)/wrappers/pyAgrum/testunits/testsOnPython.py
+	sed -i 's|logfilename = cwd + logfilename|logfilename = "/tmp/agrum.log"|g' $(CURDIR)/wrappers/pyAgrum/testunits/gumTest.py
 	LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$${LD_LIBRARY_PATH}:}$(CURDIR)/debian/agrum/usr/lib/$(DEB_HOST_MULTIARCH) \
 	  PYTHONPATH=$(CURDIR)/debian/agrum/usr/lib/python$$(python3 -c "import sysconfig; print(sysconfig.get_python_version())")/dist-packages \
 	  /usr/bin/python3 $(CURDIR)/wrappers/pyAgrum/testunits/gumTest.py

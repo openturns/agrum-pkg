@@ -6,7 +6,7 @@
 %endif
 
 Name:           agrum
-Version:        1.8.3
+Version:        1.10.0
 Release:        0%{?dist}
 Summary:        A GRaphical Universal Modeler
 Group:          System Environment/Libraries
@@ -60,6 +60,7 @@ Python textual interface to aGrUM library
 
 %prep
 %setup -q -n aGrUM-%{version}
+sed -i "s|sys.log|logging.warning|g" wrappers/pyAgrum/testunits/testsOnPython.py
 
 %build
 %cmake -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON -DBUILD_PYTHON=ON
